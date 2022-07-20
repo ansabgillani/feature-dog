@@ -14,7 +14,7 @@ Pre-requisites:
 ## How to run?
 `$ docker-compose up`
 or 
-`$ docker-compose up -d` to run in the bckground.
+`$ docker-compose up -d` to run in the background.
 
 To work with django commands, use:
 `$ sudo docker-compose run web ./manage.py migrate` etc.
