@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from users.models import OrganizationProfile, Tag
+from users.models import OrganizationProfile
 
 
 class Post(models.Model):
@@ -13,7 +13,7 @@ class Post(models.Model):
     body = models.TextField()
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     receiver = models.ForeignKey(OrganizationProfile, on_delete=models.CASCADE)
-    status = models.CharField(max_length=255, choices=STATUSES, default=STATUSES.WAITING)
+    status = models.CharField(max_length=255, choices=STATUSES.choices, default=STATUSES.WAITING)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     is_draft = models.BooleanField()
@@ -41,6 +41,12 @@ class Upvote(models.Model):
 class PostImage(models.Model):
     image = models.ImageField(upload_to='images/')
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+
+class Tag(models.Model):
+    color = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    organization = models.ForeignKey(OrganizationProfile, on_delete=models.CASCADE)
 
 
 class PostTag(models.Model):

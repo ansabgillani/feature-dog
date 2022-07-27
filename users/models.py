@@ -35,7 +35,3 @@ class AssociatedOrganizationToCustomer(models.Model):
     organization = models.ForeignKey(OrganizationProfile, on_delete=models.CASCADE)
 
 
-class Tag(models.Model):
-    color = models.CommaSeparatedIntegerField()
-    name = models.CharField(max_length=255)
-    organization = models.ForeignKey(OrganizationProfile, on_delete=models.CASCADE)
