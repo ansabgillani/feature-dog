@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
+
 class Organization(models.Model):
     organization_name = models.CharField(max_length=255)
     slug = models.CharField(max_length=255, unique=True)
@@ -12,7 +13,6 @@ class Organization(models.Model):
 
 
 class OrganizationProfile(models.Model):
-
     class OrganizationRoles(models.TextChoices):
         ADMIN = 'ADMIN', _('Admin')
         MODERATOR = 'MODERATOR', _('Moderator')
@@ -32,4 +32,10 @@ class CustomerProfile(models.Model):
 
 class AssociatedOrganizationToCustomer(models.Model):
     customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE)
+    organization = models.ForeignKey(OrganizationProfile, on_delete=models.CASCADE)
+
+
+class Tag(models.Model):
+    color = models.CommaSeparatedIntegerField()
+    name = models.CharField(max_length=255)
     organization = models.ForeignKey(OrganizationProfile, on_delete=models.CASCADE)
