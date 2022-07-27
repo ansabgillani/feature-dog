@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from users.models import OrganizationProfile
+from users.models import OrganizationProfile, CustomerProfile
 
 
 class Post(models.Model):
@@ -11,7 +11,7 @@ class Post(models.Model):
 
     title = models.CharField(max_length=255)
     body = models.TextField()
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    sender = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE)
     receiver = models.ForeignKey(OrganizationProfile, on_delete=models.CASCADE)
     status = models.CharField(max_length=255, choices=STATUSES.choices, default=STATUSES.WAITING)
     created_at = models.DateTimeField()
