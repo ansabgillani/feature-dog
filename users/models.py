@@ -82,7 +82,7 @@ class CustomerProfile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)  # Resize image
             # Save it again and override the larger image
-            img.save(self.image.path)
+            img.save(self.profile_image.path)
 
 
 class AssociatedOrganizationToCustomer(models.Model):

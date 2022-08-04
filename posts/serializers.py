@@ -20,6 +20,7 @@ class CommentUpvoteSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     comment_upvotes = CommentUpvoteSerializer(many=True)
+    sender_username = serializers.CharField(source='sender.get_username')
 
     class Meta:
         model = Comment
@@ -29,6 +30,7 @@ class CommentSerializer(serializers.ModelSerializer):
             'created_at',
             'is_internal',
             'sender',
+            'sender_username',
             'post',
             'comment_upvotes',
         )
