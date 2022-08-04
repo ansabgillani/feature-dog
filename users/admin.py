@@ -22,7 +22,7 @@ class OrganizationProfileInLine(admin.StackedInline):
 @admin.register(CustomerProfile)
 class CustomerProfile(admin.ModelAdmin):
     model = CustomerProfile
-    list_display = ['profile_image']
+    list_display = ['user','profile_image']
 
 
 
