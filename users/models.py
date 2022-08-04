@@ -10,6 +10,9 @@ class Organization(models.Model):
     logo = models.ImageField(upload_to='images/')
     description = models.TextField()
     no_of_employees = models.PositiveIntegerField()
+    
+    def __str__(self):
+        return self.organization_name
 
 
 class OrganizationProfile(models.Model):
@@ -23,11 +26,19 @@ class OrganizationProfile(models.Model):
     designation = models.CharField(max_length=255)
     profile_image = models.ImageField(upload_to='images/')
     role = models.CharField(max_length=255, choices=OrganizationRoles.choices, default=OrganizationRoles.ADMIN)
+    
+    def __str__(self):
+        return self.organization.organization_name
+
 
 
 class CustomerProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to='images/')
+    
+    def __str__(self):
+        return self.user.get_username()
+
 
 
 class AssociatedOrganizationToCustomer(models.Model):
