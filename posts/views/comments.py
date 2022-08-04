@@ -1,4 +1,4 @@
-from users.models import CustomerProfile, Organization, User
+from users.models import Organization, User
 from posts.serializers import (
     CommentSerializer,
     Post,
@@ -16,26 +16,6 @@ from rest_framework import (
 )
 
 
-class CommentRetrieveView(generics.RetrieveAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-
-    def get(self, request, comment_pk, post_pk, organization_slug):
-        try:
-            organization = Organization.objects.get(slug=organization_slug)
-            post = Post.objects.get(receiver=organization, pk=post_pk)
-            comment = Comment.objects.get(post=post, pk=comment_pk)
-            serializer = CommentSerializer(comment)
-            return response.Response(data=serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return response.Response(
-                data={
-                    'error': str(e)
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-
 class CommentListCreateView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -44,7 +24,7 @@ class CommentListCreateView(generics.ListCreateAPIView):
         try:
             data = request.data
             organization = Organization.objects.get(slug=organization_slug)
-            post = Post.objects.get(receiver=organization.pk, pk=post_pk)
+            post = Post.objects.get(receiver=organization, pk=post_pk)
             sender = User.objects.get(username=data.get('sender'))
             comment = Comment.objects.create(
                 body=data.get('body'),

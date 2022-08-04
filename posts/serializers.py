@@ -15,7 +15,13 @@ class CommentUpvoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CommentUpvote
-        fields = ('upvote_by', 'comment')
+        fields = (
+            'upvote_by',
+        )
+        
+        read_only_fields = (
+            'comment',
+        )
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -34,6 +40,8 @@ class CommentSerializer(serializers.ModelSerializer):
         )
 
         read_only_fields = (
+            'id',
+            'post',
             'created_at',
         )
 
@@ -45,14 +53,22 @@ class UpvoteSerializer(serializers.ModelSerializer):
         model = Upvote
         fields = (
             'upvote_by',
-            'post'
+        )
+        
+        read_only_fields = (
+            'post',
         )
 
 
 class PostImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostImage
-        fields = ('image',)
+        fields = (
+            'image',
+        )
+        read_only_fields = (
+            'post',
+        )
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -61,11 +77,14 @@ class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = [
+        fields = (
             'name',
             'color',
-            'organization'
-        ]
+            'organization',
+        )
+        read_only_fields = (
+            'organization',
+        )
 
 
 class PostTagSerializer(serializers.ModelSerializer):
@@ -75,6 +94,9 @@ class PostTagSerializer(serializers.ModelSerializer):
         model = PostTag
         fields = (
             'tag',
+        )
+        read_only_fields = (
+            'post',
         )
 
 
@@ -98,8 +120,6 @@ class PostSerializer(serializers.ModelSerializer):
             'title',
             'body',
             'sender',
-            'receiver',
-            'receiver_slug',
             'status',
             'updated_at',
             'is_draft',
@@ -113,6 +133,6 @@ class PostSerializer(serializers.ModelSerializer):
 
         read_only_fields = (
             'created_at',
+            'receiver',
+            'receiver_slug',
         )
-
-        # fields = '__all__'

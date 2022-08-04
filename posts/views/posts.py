@@ -103,7 +103,7 @@ class UpvoteListCreateView(generics.ListCreateAPIView):
         try:
             organization = Organization.objects.get(slug=organization_slug)
             post = Post.objects.get(receiver=organization, id=post_pk)
-            upvote = Upvote.objects.get(post=post)
+            upvote = Upvote.objects.filter(post=post)
             serializer = UpvoteSerializer(upvote)
             return response.Response(data=serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
