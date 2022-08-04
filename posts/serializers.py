@@ -18,7 +18,7 @@ class CommentUpvoteSerializer(serializers.ModelSerializer):
         fields = (
             'upvote_by',
         )
-        
+
         read_only_fields = (
             'comment',
         )
@@ -56,7 +56,7 @@ class UpvoteSerializer(serializers.ModelSerializer):
         fields = (
             'upvote_by',
         )
-        
+
         read_only_fields = (
             'post',
         )
@@ -122,8 +122,11 @@ class PostSerializer(serializers.ModelSerializer):
             'title',
             'body',
             'sender',
+            'receiver',
+            'receiver_slug',
             'status',
             'updated_at',
+            'created_at',
             'is_draft',
             'is_published',
             'upvotes',

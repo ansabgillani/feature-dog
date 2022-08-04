@@ -29,6 +29,9 @@ class CommentListCreateView(generics.ListCreateAPIView):
             sender_username = data.get('username', None)
             is_internal = (True if data.get('is_internal') == 'true' else False) if data.get(
                 'is_internal', None) else None
+            sort_asc = data.get('sort_asc', None)
+            sort_dsc = data.get('sort_dsc', None)
+
             arguments = {
                 'post': post,
                 'sender': User.objects.get(username=sender_username) if sender_username else None,
@@ -36,6 +39,13 @@ class CommentListCreateView(generics.ListCreateAPIView):
             }
             arguments = {k: v for k, v in arguments.items() if v is not None}
             comments = Comment.objects.filter(**arguments)
+            if sort_asc and sort_dsc:
+                comments = comments.order_by('-'+sort_dsc, sort_asc)
+            elif sort_dsc:
+                comments = comments.order_by('-'+sort_dsc)
+            elif sort_asc:
+                comments = comments.order_by(sort_asc)
+
         return comments
 
     def get(self, request, post_pk, organization_slug):

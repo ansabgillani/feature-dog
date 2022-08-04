@@ -22,10 +22,50 @@ class PostListCreateView(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
 
+    def filter_data(self, receiver, data):
+        # data is going to be a dictionary
+        posts = None
+        if not data:
+            posts = Post.objects.filter(receiver=receiver)
+        else:
+            sender_username = data.get('sender', None)
+            is_published = (True if data.get('is_published') == 'true' else False) if data.get(
+                'is_published', None) else None
+            is_draft = (True if data.get('is_draft') == 'true' else False) if data.get(
+                'is_draft', None) else None
+            status = data.get('status') if data.get('status') else None
+            created_at = data.get('created_at') if data.get(
+                'created_at') else None
+            user = User.objects.get(
+                username=data['sender']) if sender_username else None
+            sort_asc = data.get('sort_asc', None)
+            sort_dsc = data.get('sort_dsc', None)
+            tags = data.get("tags", None)
+            tags = tags.split(",")
+            tags = Tag.objects.filter(organization=receiver, color__in=tags)
+            arguments = {
+                'receiver': receiver,
+                'sender': CustomerProfile.objects.get(user=user) if sender_username else None,
+                'is_published': is_published,
+                'status': status,
+                'is_draft': is_draft,
+                'created_at': created_at,
+                'post_tags__tag__in': tags,
+            }
+            arguments = {k: v for k, v in arguments.items() if v is not None}
+            posts = Post.objects.filter(**arguments)
+            if sort_asc and sort_dsc:
+                posts = posts.order_by('-'+sort_dsc, sort_asc)
+            elif sort_dsc:
+                posts = posts.order_by('-'+sort_dsc)
+            elif sort_asc:
+                posts = posts.order_by(sort_asc)
+        return posts
+
     def get(self, request, organization_slug):
         try:
             organization = Organization.objects.get(slug=organization_slug)
-            posts = Post.objects.filter(receiver=organization.pk)
+            posts = self.filter_data(receiver=organization, data=request.GET)
             serializer = PostSerializer(posts, many=True)
             return response.Response(data=serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
