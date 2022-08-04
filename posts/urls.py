@@ -9,6 +9,7 @@ from posts.views.comments import (
     CommentListCreateView,
     CommentUpvoteListCreateView
 )
+from posts.views.tags import TagListCreateView
 
 urlpatterns = [
     # path('', include(router.urls)),
@@ -32,4 +33,9 @@ urlpatterns = [
     path('api/<organization_slug>/posts/<int:post_pk>/comments/<int:comment_pk>/upvotes',
          CommentUpvoteListCreateView.as_view(), name='comment_upvote_list_create_view'),
     # Comment Upvote View for a particular comment
+
+    path('api/<organization_slug>/tags',
+         TagListCreateView.as_view(), name='tags_list_create_view'),
+    # Comment Upvote View for a particular comment
+
 ]
