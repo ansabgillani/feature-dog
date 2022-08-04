@@ -1,10 +1,12 @@
-from django.urls import path, include
-from posts.views import (
+from django.urls import path
+from posts.views.posts import (
     PostListCreateView,
     PostDetailView,
-    CommentRetriveView,
-    CommentListCreateView,
     UpvoteListCreateView,
+)
+from posts.views.comments import (
+    CommentRetrieveView,
+    CommentListCreateView,
     CommentUpvoteListCreateView
 )
 
@@ -24,7 +26,7 @@ urlpatterns = [
          name='comment_create_view'),  # Comment Create View for a particular post
 
     path('api/<organization_slug>/posts/<int:post_pk>/comments/<int:comment_pk>',
-         CommentRetriveView.as_view(), name='comment_create_view'),
+         CommentRetrieveView.as_view(), name='comment_create_view'),
     # Comment Create View for a particular post
 
     path('api/<organization_slug>/posts/<int:post_pk>/comments/<int:comment_pk>/upvotes',
