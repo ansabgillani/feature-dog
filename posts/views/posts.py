@@ -21,7 +21,7 @@ from rest_framework import (
 class PostListCreateView(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
-    
+
     def filter_data(self, receiver, data):
         # data is going to be a dictionary
         posts = None
@@ -96,7 +96,7 @@ class PostListCreateView(generics.ListCreateAPIView):
                 for post_image in post_images:
                     image = PostImage.objects.create(
                         image=post_image['image'], post=post)
-                    image.save()
+                    # image.save()
             post_tags = data.get('post_tags', None)
             if post_tags:
                 for post_tag in post_tags:
@@ -104,7 +104,7 @@ class PostListCreateView(generics.ListCreateAPIView):
                     tag = Tag.objects.get(color=tag_.get(
                         'color'), organization=organization)
                     p_tag = PostTag.objects.create(tag=tag, post=post)
-                    p_tag.save()
+                    # p_tag.save()
             serializer = PostSerializer(post)
             return response.Response(data=serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
@@ -145,7 +145,10 @@ class UpvoteListCreateView(generics.ListCreateAPIView):
             post = Post.objects.get(receiver=organization, id=post_pk)
             upvote = Upvote.objects.filter(post=post)
             serializer = UpvoteSerializer(upvote)
-            return response.Response(data=serializer.data, status=status.HTTP_200_OK)
+            return response.Response(
+                data=serializer.data,
+                status=status.HTTP_200_OK
+            )
         except Exception as e:
             return response.Response(
                 data={

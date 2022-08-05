@@ -14,7 +14,7 @@ class Organization(models.Model):
     logo = models.ImageField(upload_to=logo_directory_path, blank=True)
     description = models.TextField()
     no_of_employees = models.PositiveIntegerField()
-    
+
     def __str__(self):
         return self.organization_name
 
@@ -33,7 +33,6 @@ class Organization(models.Model):
             img.save(self.logo.path)
 
 
-
 class OrganizationProfile(models.Model):
     class OrganizationRoles(models.TextChoices):
         ADMIN = 'ADMIN', _('Admin')
@@ -43,15 +42,17 @@ class OrganizationProfile(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     professional_email = models.EmailField(unique=True)
     designation = models.CharField(max_length=255)
-    profile_image = models.ImageField(upload_to=profile_directory_path, blank=True)
-    role = models.CharField(max_length=255, choices=OrganizationRoles.choices, default=OrganizationRoles.ADMIN)
-    
+    profile_image = models.ImageField(
+        upload_to=profile_directory_path, blank=True)
+    role = models.CharField(
+        max_length=255, choices=OrganizationRoles.choices, default=OrganizationRoles.ADMIN)
+
     def __str__(self):
         return self.organization.organization_name
 
     # Override the save method of the model
-    def save(self):
-        super().save()
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
         img = Image.open(self.profile_image.path)  # Open image
 
@@ -67,7 +68,7 @@ class CustomerProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile_image = models.ImageField(
         upload_to=profile_directory_path, blank=True)
-    
+
     def __str__(self):
         return self.user.get_username()
 
@@ -86,5 +87,7 @@ class CustomerProfile(models.Model):
 
 
 class AssociatedOrganizationToCustomer(models.Model):
-    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        CustomerProfile, related_name='customer', on_delete=models.CASCADE)
+    organization = models.ForeignKey(
+        Organization, related_name='organization', on_delete=models.CASCADE)
