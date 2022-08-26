@@ -21,7 +21,7 @@ from rest_framework import (
 class PostListCreateView(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
-
+    
     def filter_data(self, receiver, data):
         # data is going to be a dictionary
         posts = None
